@@ -6,10 +6,15 @@
 #
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
+import os
 import sys
-from PyQt5.Qt import QApplication, QWidget
+from PyQt5.Qt import QApplication, QWidget, QIcon, QPixmap
 from ui import UFDebugToolUI
 from log import logger, LogWindow
+
+icon_path = os.path.join(os.path.split(sys.path[0])[0], 'icon')
+if not os.path.exists(icon_path):
+    icon_path = os.path.join(os.getcwd(), 'icon')
 
 
 class UFDebugTool(QWidget):
@@ -17,6 +22,11 @@ class UFDebugTool(QWidget):
         super(UFDebugTool, self).__init__()
         self.ui = UFDebugToolUI(self)
         self.log_window = LogWindow(self)
+        icon = QIcon()
+        icon.addPixmap(QPixmap(os.path.join(icon_path, 'main.png')), QIcon.Normal, QIcon.Off)
+        self.setWindowIcon(icon)
+        self.log_window.setWindowIcon(icon)
+
         # self.log_window.show()
         # logger.debug('*****debug log style******')
         # logger.info('*****info log style******')
@@ -41,9 +51,9 @@ class UFDebugTool(QWidget):
 def main():
     app = QApplication(sys.argv)
     controller = UFDebugTool()
-    # icon = QIcon()
-    # icon.addPixmap(QPixmap(os.path.join(icon_path, 'main.png')), QIcon.Normal, QIcon.Off)
-    # controller.setWindowIcon(icon)
+    icon = QIcon()
+    icon.addPixmap(QPixmap(os.path.join(icon_path, 'main.png')), QIcon.Normal, QIcon.Off)
+    controller.setWindowIcon(icon)
     controller.show()
     sys.exit(app.exec_())
 

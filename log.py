@@ -6,11 +6,9 @@
 #
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
-import sys
 import queue
 from PyQt5.Qt import QWidget, QTextEdit, QVBoxLayout, QTextCursor, QGridLayout, QFrame, QPushButton
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
-
 
 log_que = queue.Queue()
 
