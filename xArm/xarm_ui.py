@@ -31,9 +31,6 @@ if not os.path.exists(path):
 connect_icon_path = os.path.join(path, 'connect.png')
 disconnect_icon_path = os.path.join(path, 'disconnect.png')
 
-cur_path = os.getcwd()
-gcode_path = os.path.join(cur_path, 'gcode_file')
-
 i18n = {
     'cn': {
         'Connect': '连接',
@@ -57,7 +54,7 @@ i18n = {
         'SetState': '设置状态',
         'CleanErrorWarn': '清除错误和警告',
         'Stop': '停止运动',
-        'Reset': '回到零点',
+        'Reset': '复位',
         'GetServoAddr16': 'GetServoAddr16',
         'SetServoAddr16': 'SetServoAddr16',
         'GetServoAddr32': 'GetServoAddr32',
@@ -104,16 +101,15 @@ class XArmUI(object):
         self.layout = layout
         super(XArmUI, self).__init__()
         self.handler = XArmHandler(self)
-        self.lang = 'en'
+        self.lang = self.main_ui.lang
         self.set_ui()
-        self.addr = None
-        self.report_type = 'normal'
         self.set_disable(True)
 
     def set_ui(self):
         self._set_common_top_ui()
         self._set_tab()
         self._set_common_down_ui()
+        self.connect_slot()
 
     def _set_common_top_ui(self):
         top_frame = QFrame()
@@ -149,7 +145,6 @@ class XArmUI(object):
         self.lnt_addr.setMinimumWidth(60)
         self.btn_connect = QPushButton(i18n[self.lang]['Connect'])
         # self.btn_connect.setMaximumWidth(50)
-        self.btn_connect.clicked.connect(self.connect)
 
         # common_top_layout.addStretch(0)
         common_top_layout.setSpacing(10)
@@ -216,8 +211,8 @@ class XArmUI(object):
         toolBox1.addItem(groupBox1, "")
         toolBox2.addItem(groupBox2, "")
 
-        tab_widget.addTab(toolBox1, "Joint")
-        tab_widget.addTab(toolBox2, "Cartesian")
+        tab_widget.addTab(toolBox1, i18n[self.lang]['Joint'])
+        tab_widget.addTab(toolBox2, i18n[self.lang]['Cartesian'])
 
         joint_layout = QVBoxLayout(groupBox1)
         cartesian_layout = QVBoxLayout(groupBox2)
@@ -240,10 +235,6 @@ class XArmUI(object):
         self.spinbox_speed.setMinimum(1)
         self.spinbox_speed.setMaximum(1000)
         self.spinbox_speed.setValue(50)
-        self.slider_speed.valueChanged.connect(
-            functools.partial(self.slider_spinbox_related, slave=self.spinbox_speed, scale=1))
-        self.spinbox_speed.valueChanged.connect(
-            functools.partial(self.slider_spinbox_related, slave=self.slider_speed, scale=1))
         slider_layout.addWidget(label, 0, 0)
         slider_layout.addWidget(self.slider_speed, 0, 1)
         slider_layout.addWidget(self.spinbox_speed, 0, 2)
@@ -258,10 +249,6 @@ class XArmUI(object):
         self.spinbox_acc.setMinimum(1)
         self.spinbox_acc.setMaximum(100000)
         self.spinbox_acc.setValue(5000)
-        self.slider_acc.valueChanged.connect(
-            functools.partial(self.slider_spinbox_related, slave=self.spinbox_acc, scale=1))
-        self.spinbox_acc.valueChanged.connect(
-            functools.partial(self.slider_spinbox_related, slave=self.slider_acc, scale=1))
         slider_layout.addWidget(label, 0, 3)
         slider_layout.addWidget(self.slider_acc, 0, 4)
         slider_layout.addWidget(self.spinbox_acc, 0, 5)
@@ -274,10 +261,6 @@ class XArmUI(object):
         self.btn_clean = QPushButton(i18n[self.lang]['CleanErrorWarn'])
         self.btn_reset = QPushButton(i18n[self.lang]['Reset'])
         self.btn_get_servo_dbmsg = QPushButton(i18n[self.lang]['GetServoDebugMsg'])
-        self.btn_stop.clicked.connect(self.stop)
-        self.btn_clean.clicked.connect(self.clean)
-        self.btn_reset.clicked.connect(self.reset)
-        self.btn_get_servo_dbmsg.clicked.connect(functools.partial(self.handler.get_servo_debug_msg, only_log_error_servo=False))
 
         common_layout.addWidget(self.btn_stop, 0, 0)
         common_layout.addWidget(self.btn_clean, 0, 2)
@@ -299,17 +282,14 @@ class XArmUI(object):
         self.btn_motion_disable = QPushButton(i18n[self.lang]['MotionDisable'])
         self.btn_servo_attach = QPushButton(i18n[self.lang]['ServoAttach'])
         self.btn_servo_detach = QPushButton(i18n[self.lang]['ServoDetach'])
-        self.btn_motion_enable.clicked.connect(self.motion_enable)
-        self.btn_motion_disable.clicked.connect(self.motion_disable)
-        self.btn_servo_attach.clicked.connect(self.set_servo_attach)
-        self.btn_servo_detach.clicked.connect(self.set_servo_detach)
+
         self.combobox_state = QComboBox()
         self.combobox_state.setStyleSheet('''color: blue;''')
         for item in ['sport', 'pause', 'stop']:
             self.combobox_state.addItem(item)
             self.combobox_state.setCurrentIndex(0)
         self.btn_set_state = QPushButton(i18n[self.lang]['SetState'])
-        self.btn_set_state.clicked.connect(self.set_state)
+
         btn_layout.addWidget(self.btn_motion_enable, 0, 1)
         btn_layout.addWidget(self.btn_motion_disable, 0, 2)
         btn_layout.addWidget(self.btn_servo_attach, 0, 3)
@@ -324,11 +304,7 @@ class XArmUI(object):
         self.btn_get_servo_addr32 = QPushButton(i18n[self.lang]['GetServoAddr32'])
         self.btn_set_servo_addr32 = QPushButton(i18n[self.lang]['SetServoAddr32'])
         self.btn_set_servo_zero = QPushButton(i18n[self.lang]['SetServoZero'])
-        self.btn_get_servo_addr16.clicked.connect(self.get_servo_addr_16)
-        self.btn_set_servo_addr16.clicked.connect(self.set_servo_addr_16)
-        self.btn_get_servo_addr32.clicked.connect(self.get_servo_addr_32)
-        self.btn_set_servo_addr32.clicked.connect(self.set_servo_addr_32)
-        self.btn_set_servo_zero.clicked.connect(self.set_servo_zero)
+
         btn_layout.addWidget(self.lnt_servo_addr, 1, 0)
         btn_layout.addWidget(self.lnt_servo_addr_value, 1, 1)
         btn_layout.addWidget(self.btn_get_servo_addr16, 1, 2)
@@ -336,6 +312,32 @@ class XArmUI(object):
         btn_layout.addWidget(self.btn_get_servo_addr32, 1, 4)
         btn_layout.addWidget(self.btn_set_servo_addr32, 1, 5)
         btn_layout.addWidget(self.btn_set_servo_zero, 1, 6)
+
+    def connect_slot(self):
+        self.btn_connect.clicked.connect(self.connect)
+        self.slider_speed.valueChanged.connect(
+            functools.partial(self.slider_spinbox_related, slave=self.spinbox_speed, scale=1))
+        self.spinbox_speed.valueChanged.connect(
+            functools.partial(self.slider_spinbox_related, slave=self.slider_speed, scale=1))
+        self.slider_acc.valueChanged.connect(
+            functools.partial(self.slider_spinbox_related, slave=self.spinbox_acc, scale=1))
+        self.spinbox_acc.valueChanged.connect(
+            functools.partial(self.slider_spinbox_related, slave=self.slider_acc, scale=1))
+        self.btn_stop.clicked.connect(self.stop)
+        self.btn_clean.clicked.connect(self.clean)
+        self.btn_reset.clicked.connect(self.reset)
+        self.btn_get_servo_dbmsg.clicked.connect(
+            functools.partial(self.handler.get_servo_debug_msg, only_log_error_servo=False))
+        self.btn_motion_enable.clicked.connect(self.motion_enable)
+        self.btn_motion_disable.clicked.connect(self.motion_disable)
+        self.btn_servo_attach.clicked.connect(self.set_servo_attach)
+        self.btn_servo_detach.clicked.connect(self.set_servo_detach)
+        self.btn_set_state.clicked.connect(self.set_state)
+        self.btn_get_servo_addr16.clicked.connect(self.get_servo_addr_16)
+        self.btn_set_servo_addr16.clicked.connect(self.set_servo_addr_16)
+        self.btn_get_servo_addr32.clicked.connect(self.get_servo_addr_32)
+        self.btn_set_servo_addr32.clicked.connect(self.set_servo_addr_32)
+        self.btn_set_servo_zero.clicked.connect(self.set_servo_zero)
 
     @staticmethod
     def slider_spinbox_related(value, master=None, slave=None, scale=1):
@@ -410,14 +412,14 @@ class XArmUI(object):
             img = QImage()
             if item[0]:
                 logger.info(
-                    'connect to {} success, report: {}'.format(self.addr, self.report_type))
+                    'connect to {} success, report: {}'.format(self.handler.addr, self.handler.report_type))
                 if img.load(connect_icon_path):
                     self.label_connected.setPixmap(QPixmap.fromImage(img))
                     self.btn_connect.setText(i18n[self.lang]['Disconnect'])
                     self.btn_connect.setStyleSheet('''color: red;font:bold;''')
                 self.set_disable(False)
             else:
-                logger.info('disconnect from or failed connect {}'.format(self.addr))
+                logger.info('disconnect from or failed connect {}'.format(self.handler.addr))
                 self.handler.cmd_que.queue.clear()
                 if img.load(disconnect_icon_path):
                     self.label_connected.setPixmap(QPixmap.fromImage(img))

@@ -27,15 +27,8 @@ from log import logger
 lock = threading.Lock()
 on_init = False
 
-textedit_log = None
-log_lock = threading.Lock()
-
 RAD_DEGREE = 57.295779513082320876798154814105
 TCP_OR_JOINT_LIMIT = -6
-
-icon_path = os.path.join(os.path.split(sys.path[0])[0], 'icon')
-if not os.path.exists(icon_path):
-    icon_path = os.path.join(os.getcwd(), 'icon')
 
 
 def log_servo_error(servo, state, errno, only_log_error_servo=True):
@@ -74,6 +67,8 @@ class XArmHandler(object):
         self.ui = ui
 
         self.xarm = None
+        self.addr = None
+        self.report_type = 'normal'
         self.cmd_que = queue.Queue(100)
 
         self.cmd_thread = XArmThread(self.cmd_que)
@@ -114,7 +109,7 @@ class XArmHandler(object):
 
     def connnect_thread(self, addr, report_type):
         try:
-            self.ui.addr = addr
+            self.addr = addr
             self.xarm = XArmAPI(port=addr,
                                 enable_heartbeat=True,
                                 enable_report=True,
@@ -129,7 +124,7 @@ class XArmHandler(object):
             if not self.xarm.connected:
                 time.sleep(0.5)
             # threading.Timer(1, self.init_robot).start()
-            self.ui.report_type = report_type
+            self.report_type = report_type
             return True
         except Exception as e:
             self.report_que.put({

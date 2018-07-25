@@ -11,12 +11,14 @@ from PyQt5.Qt import QTabWidget, QWidget, QFrame, QMenuBar, QAction, QToolBox, Q
 from PyQt5.Qt import QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog
 from openmv.openmv_ui import OpenMV_UI
 from xArm.xarm_ui import XArmUI
+from uArm.uarm_ui import UArmUI
 
 
 class UFDebugToolUI(object):
     def __init__(self, window=None):
         self.window = window if window is not None else QWidget
         super(UFDebugToolUI, self).__init__()
+        self.lang = 'en'
         self.set_ui()
 
     def set_ui(self):
@@ -117,9 +119,10 @@ class UFDebugToolUI(object):
         openmv_layout = QHBoxLayout(groupBox3)
         # print(self.tab_widget.currentWidget())
 
-        self.openmv_ui = OpenMV_UI(self, openmv_layout)
+        self.uarm_ui = UArmUI(self, uarm_layout)
         self.xarm_ui = XArmUI(self, xarm_layout)
-        self.tab_widget.setCurrentIndex(1)
+        self.openmv_ui = OpenMV_UI(self, openmv_layout)
+        self.tab_widget.setCurrentIndex(0)
 
     def new_dialog(self):
         self.openmv_ui.textEdit.setText('')
