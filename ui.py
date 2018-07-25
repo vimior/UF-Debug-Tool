@@ -10,6 +10,7 @@
 from PyQt5.Qt import QTabWidget, QWidget, QFrame, QMenuBar, QAction, QToolBox, QGroupBox
 from PyQt5.Qt import QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog
 from openmv.openmv_ui import OpenMV_UI
+from xArm.xarm_ui import XArmUI
 
 
 class UFDebugToolUI(object):
@@ -25,8 +26,8 @@ class UFDebugToolUI(object):
 
     def _set_window(self):
         self.window.setWindowTitle(self.window.tr('UF-Debug-Tool'))
-        self.window.setMinimumHeight(700)
-        self.window.setMinimumWidth(800)
+        self.window.setMinimumHeight(800)
+        self.window.setMinimumWidth(1000)
         self.main_layout = QVBoxLayout(self.window)
 
     def _set_menubar(self):
@@ -117,7 +118,8 @@ class UFDebugToolUI(object):
         # print(self.tab_widget.currentWidget())
 
         self.openmv_ui = OpenMV_UI(self, openmv_layout)
-        self.tab_widget.setCurrentIndex(2)
+        self.xarm_ui = XArmUI(self, xarm_layout)
+        self.tab_widget.setCurrentIndex(1)
 
     def new_dialog(self):
         self.openmv_ui.textEdit.setText('')

@@ -43,6 +43,9 @@ class Logger(object):
                 'text': text
             })
 
+    def log(self, *args):
+        self._log(*args, color='black')
+
     def debug(self, *args):
         self._log(*args, color='#999999', level='DEBUG')
 
