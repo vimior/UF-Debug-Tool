@@ -8,14 +8,10 @@
 
 import sys
 import time
-import json
-import os
-import functools
 import threading
 import queue
-from PyQt5.Qt import QApplication, QWidget, QTextEdit, QFrame, QVBoxLayout, QGridLayout, QDesktopWidget, QTextCursor, \
-    QPushButton, QIcon, QPixmap, QThread
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.Qt import QThread
+from PyQt5.QtCore import pyqtSignal
 
 from uarm.wrapper import SwiftAPI
 

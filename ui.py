@@ -12,6 +12,7 @@ from PyQt5.Qt import QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog
 from openmv.openmv_ui import OpenMV_UI
 from xArm.xarm_ui import XArmUI
 from uArm.uarm_ui import UArmUI
+from gcode.gcode_ui import GcodeUI
 
 
 class UFDebugToolUI(object):
@@ -93,36 +94,38 @@ class UFDebugToolUI(object):
         toolBox1 = QToolBox()
         toolBox2 = QToolBox()
         toolBox3 = QToolBox()
-        # toolBox4 = QToolBox()
+        toolBox4 = QToolBox()
         # toolBox5 = QToolBox()
 
         groupBox1 = QGroupBox()
         groupBox2 = QGroupBox()
         groupBox3 = QGroupBox()
-        # groupBox4 = QGroupBox()
+        groupBox4 = QGroupBox()
         # groupBox5 = QGroupBox()
 
         toolBox1.addItem(groupBox1, "")
         toolBox2.addItem(groupBox2, "")
         toolBox3.addItem(groupBox3, "")
-        # toolBox4.addItem(groupBox4, "")
+        toolBox4.addItem(groupBox4, "")
         # toolBox5.addItem(groupBox5, "")
 
         self.tab_widget.addTab(toolBox1, "uArm")
         self.tab_widget.addTab(toolBox2, "xArm")
         self.tab_widget.addTab(toolBox3, "OpenMV")
-        # tab_widget.addTab(toolBox4, "Tab-4")
+        self.tab_widget.addTab(toolBox4, "Gcode")
         # tab_widget.addTab(toolBox5, "Tab-5")
 
         uarm_layout = QVBoxLayout(groupBox1)
         xarm_layout = QVBoxLayout(groupBox2)
         openmv_layout = QHBoxLayout(groupBox3)
+        gcode_layout = QVBoxLayout(groupBox4)
         # print(self.tab_widget.currentWidget())
 
         self.uarm_ui = UArmUI(self, uarm_layout)
         self.xarm_ui = XArmUI(self, xarm_layout)
         self.openmv_ui = OpenMV_UI(self, openmv_layout)
-        self.tab_widget.setCurrentIndex(0)
+        self.gcode_ui = GcodeUI(self, gcode_layout)
+        self.tab_widget.setCurrentIndex(3)
 
     def new_dialog(self):
         self.openmv_ui.textEdit.setText('')
