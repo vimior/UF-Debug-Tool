@@ -9,12 +9,10 @@
 import functools
 import os
 import sys
-import threading
-import time
 from PyQt5.QtCore import Qt
-from PyQt5.Qt import QWidget, QTabWidget, QFrame, QMenuBar, QToolBox, QGroupBox, QMessageBox
+from PyQt5.Qt import QTabWidget, QFrame, QToolBox, QGroupBox
 from PyQt5.Qt import QVBoxLayout, QGridLayout, QHBoxLayout
-from PyQt5.Qt import QAction, QLabel, QLineEdit, QPushButton, QSpinBox, QSlider, QComboBox, QImage, QPixmap
+from PyQt5.Qt import QLabel, QLineEdit, QPushButton, QSpinBox, QSlider, QComboBox, QImage, QPixmap
 
 from .angle_ui import AngleUI
 from .coordinate_ui import CoordinateUI
@@ -23,12 +21,12 @@ from .handler import UArmHandler
 sys.path.append('..')
 from log import logger
 
-path = os.path.join(os.path.split(sys.path[0])[0], 'icon')
-if not os.path.exists(path):
-    path = os.path.join(os.getcwd(), 'icon')
+icon_path = os.path.join(os.path.split(sys.path[0])[0], 'icon')
+if not os.path.exists(icon_path):
+    icon_path = os.path.join(os.getcwd(), 'icon')
 
-connect_icon_path = os.path.join(path, 'connect.png')
-disconnect_icon_path = os.path.join(path, 'disconnect.png')
+connect_icon_path = os.path.join(icon_path, 'connect.png')
+disconnect_icon_path = os.path.join(icon_path, 'disconnect.png')
 
 
 i18n = {

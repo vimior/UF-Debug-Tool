@@ -9,12 +9,10 @@
 import functools
 import os
 import sys
-import threading
-import time
 from PyQt5.QtCore import Qt
-from PyQt5.Qt import QWidget, QTabWidget, QFrame, QMenuBar, QToolBox, QGroupBox, QMessageBox
-from PyQt5.Qt import QVBoxLayout, QGridLayout, QHBoxLayout, QBoxLayout
-from PyQt5.Qt import QAction, QLabel, QLineEdit, QPushButton, QSpinBox, QSlider, QComboBox, QImage, QPixmap
+from PyQt5.Qt import QTabWidget, QFrame, QToolBox, QGroupBox, QMessageBox
+from PyQt5.Qt import QVBoxLayout, QGridLayout, QHBoxLayout
+from PyQt5.Qt import QLabel, QLineEdit, QPushButton, QSpinBox, QSlider, QComboBox, QImage, QPixmap
 
 from .joint_ui import JointUI
 from .cartesian_ui import CartesianUI

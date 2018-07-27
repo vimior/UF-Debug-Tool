@@ -6,15 +6,11 @@
 #
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
-from PyQt5.Qt import QTextEdit, QFrame, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, \
+from PyQt5.Qt import QTextEdit, QFrame, QPushButton, QVBoxLayout, QGridLayout, \
     QLabel, QImage, QPixmap, QSizePolicy
 from PyQt5 import QtCore
 import numpy as np
-import threading
 from .handler import OpenMVHandler
-import sys
-sys.path.append('..')
-from log import logger
 
 
 class TextEdit(QTextEdit):

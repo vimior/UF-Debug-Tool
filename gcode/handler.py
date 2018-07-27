@@ -6,7 +6,7 @@
 #
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
-from ._gcode.contour.parse import SVGParser
+from .lib.contour.parse import SVGParser
 
 
 class GcodeHandler(object):

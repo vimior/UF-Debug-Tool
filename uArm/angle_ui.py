@@ -9,7 +9,7 @@
 import threading
 import functools
 from PyQt5.QtCore import Qt
-from PyQt5.Qt import QFrame, QGridLayout, QSlider, QDoubleSpinBox, QLabel, QMessageBox
+from PyQt5.Qt import QFrame, QGridLayout, QSlider, QDoubleSpinBox, QLabel
 
 
 class AngleUI(object):

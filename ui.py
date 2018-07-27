@@ -7,12 +7,13 @@
 # Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
 
 
-from PyQt5.Qt import QTabWidget, QWidget, QFrame, QMenuBar, QAction, QToolBox, QGroupBox
-from PyQt5.Qt import QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog
+from PyQt5.Qt import QTabWidget, QWidget, QMenuBar, QAction, QToolBox, QGroupBox
+from PyQt5.Qt import QHBoxLayout, QVBoxLayout, QFileDialog
 from openmv.openmv_ui import OpenMV_UI
 from xArm.xarm_ui import XArmUI
 from uArm.uarm_ui import UArmUI
 from gcode.gcode_ui import GcodeUI
+from webview.webview_ui import WebViewUI
 
 
 class UFDebugToolUI(object):
@@ -30,7 +31,7 @@ class UFDebugToolUI(object):
     def _set_window(self):
         self.window.setWindowTitle(self.window.tr('UF-Debug-Tool'))
         self.window.setMinimumHeight(800)
-        self.window.setMinimumWidth(1000)
+        self.window.setMinimumWidth(1080)
         self.main_layout = QVBoxLayout(self.window)
 
     def _set_menubar(self):
@@ -91,41 +92,42 @@ class UFDebugToolUI(object):
         # tab_widget.setMaximumHeight(self.window.geometry().height() // 2)
         self.main_layout.addWidget(self.tab_widget)
 
-        toolBox1 = QToolBox()
-        toolBox2 = QToolBox()
-        toolBox3 = QToolBox()
-        toolBox4 = QToolBox()
-        # toolBox5 = QToolBox()
+        toolbox1 = QToolBox()
+        toolbox2 = QToolBox()
+        toolbox3 = QToolBox()
+        toolbox4 = QToolBox()
+        toolbox5 = QToolBox()
 
-        groupBox1 = QGroupBox()
-        groupBox2 = QGroupBox()
-        groupBox3 = QGroupBox()
-        groupBox4 = QGroupBox()
-        # groupBox5 = QGroupBox()
+        groupbox1 = QGroupBox()
+        groupbox2 = QGroupBox()
+        groupbox3 = QGroupBox()
+        groupbox4 = QGroupBox()
+        groupbox5 = QGroupBox()
 
-        toolBox1.addItem(groupBox1, "")
-        toolBox2.addItem(groupBox2, "")
-        toolBox3.addItem(groupBox3, "")
-        toolBox4.addItem(groupBox4, "")
-        # toolBox5.addItem(groupBox5, "")
+        toolbox1.addItem(groupbox1, "")
+        toolbox2.addItem(groupbox2, "")
+        toolbox3.addItem(groupbox3, "")
+        toolbox4.addItem(groupbox4, "")
+        toolbox5.addItem(groupbox5, "")
 
-        self.tab_widget.addTab(toolBox1, "uArm")
-        self.tab_widget.addTab(toolBox2, "xArm")
-        self.tab_widget.addTab(toolBox3, "OpenMV")
-        self.tab_widget.addTab(toolBox4, "Gcode")
-        # tab_widget.addTab(toolBox5, "Tab-5")
+        self.tab_widget.addTab(toolbox1, "uArm")
+        self.tab_widget.addTab(toolbox2, "xArm")
+        self.tab_widget.addTab(toolbox3, "OpenMV")
+        self.tab_widget.addTab(toolbox4, "Gcode")
+        self.tab_widget.addTab(toolbox5, "WebView")
 
-        uarm_layout = QVBoxLayout(groupBox1)
-        xarm_layout = QVBoxLayout(groupBox2)
-        openmv_layout = QHBoxLayout(groupBox3)
-        gcode_layout = QVBoxLayout(groupBox4)
-        # print(self.tab_widget.currentWidget())
+        uarm_layout = QVBoxLayout(groupbox1)
+        xarm_layout = QVBoxLayout(groupbox2)
+        openmv_layout = QHBoxLayout(groupbox3)
+        gcode_layout = QVBoxLayout(groupbox4)
+        webview_layout = QVBoxLayout(groupbox5)
 
         self.uarm_ui = UArmUI(self, uarm_layout)
         self.xarm_ui = XArmUI(self, xarm_layout)
         self.openmv_ui = OpenMV_UI(self, openmv_layout)
         self.gcode_ui = GcodeUI(self, gcode_layout)
-        self.tab_widget.setCurrentIndex(3)
+        self.webview_ui = WebViewUI(self, webview_layout)
+        self.tab_widget.setCurrentIndex(0)
 
     def new_dialog(self):
         self.openmv_ui.textEdit.setText('')

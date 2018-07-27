@@ -1,20 +1,15 @@
 #-*- coding: UTF-8 -*-
 
-from PyQt5.Qt import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QGridLayout, QSplashScreen, \
-    QPushButton, QLabel, QSlider, QSpinBox, QDoubleSpinBox, QImage, QPixmap, QIcon, QProgressBar, \
-    QFrame, QFileDialog, QAction, QMenuBar, QSizePolicy, QTextEdit, QProgressDialog, QTimer, QMessageBox, QRadioButton
+from PyQt5.Qt import QHBoxLayout, QGridLayout, \
+    QPushButton, QLabel, QSlider, QSpinBox, QDoubleSpinBox, QImage, QPixmap, \
+    QFrame, QFileDialog, QTextEdit, QRadioButton
 from PyQt5 import QtCore
 
 import os
 import sys
 import numpy as np
-import base64
-import threading
 import json
 import functools
-import time
-from queue import LifoQueue
-from functools import partial
 from .handler import GcodeHandler
 
 icon_path = os.path.join(os.path.split(sys.path[0])[0], 'icon')
@@ -70,6 +65,7 @@ class GcodeUI(object):
     def _set_up_frame_ui(self):
         self.up_frame = QFrame()
         self.up_frame.setMinimumHeight(300)
+        self.up_frame.setMaximumHeight(500)
         self.up_layout = QHBoxLayout(self.up_frame)
         up_left_frame = QFrame()
         # up_left_frame.setMinimumWidth(self.main_ui.window.geometry().width() / 2)
